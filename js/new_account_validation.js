@@ -119,7 +119,12 @@ let form = {
     cpf: false,
     sobrenome: false,
     nome: false,
-    password: false
+    password: false,
+    cep: false,
+    logradouro: false,
+    bairro: false,
+    cidade: false,
+    uf: false
 }
 
 function mostrarApenasConta() {
@@ -169,6 +174,70 @@ function isPasswordCorrect() {
         return true
     } else {
         return false
+    }
+}
+
+// Localização:
+
+const logradouro = document.getElementById("logradouro") 
+const bairro = document.getElementById("bairro")
+const cidade = document.getElementById("cidade")
+const uf = document.getElementById("uf")
+
+async function fetchCEP(CEP) {
+
+    if (String(CEP).length != 8) {
+        console.error("CEP does not have 8 characters!")
+        return {}
+    }
+
+    let location = null
+
+    let url = `https://viacep.com.br/ws/${CEP}/json/`
+    let info = await fetch(url)
+        .then(response => response.json())
+        .then(data => location = data)
+        .catch(error => console.error(error))
+
+    // Code that inserts the values
+    if ("erro" in location) {
+        console.error("Error on the CEP response")
+        return {}
+    }
+    console.log(location)
+
+    logradouro.value = location["logradouro"]
+    bairro.value = location["bairro"]
+    cidade.value = location["localidade"]
+    uf.value = location["uf"]
+
+    await fetchCity(location["uf"])
+
+    // statusText('statusLogradouro', isEmpty(this.value, 'logradouro'))
+}
+
+const citySelector = document.getElementById("citySelector")
+
+async function fetchCity(uf) {
+    let url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/distritos`
+    
+    let data = null
+    
+    let info = await fetch(url)
+        .then(response => response.json())
+        .then(json => data = json)
+        .catch(error => console.error(error))
+    
+    let cities = []
+    
+    for (city of data) {
+       cities.push(new Option(city["nome"], city["nome"])) 
+    }
+
+    citySelector.options.length = 0
+
+    for (city of cities){
+        citySelector.add(city)
     }
 }
 

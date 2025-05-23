@@ -229,32 +229,37 @@
           <hr>
 
           <label>CEP:</label>
-            <input type="text" onchange="isEmpty(this.value, 'nome')">
-          <p id="statusNome"></p>
+            <input type="text" onchange="statusText('CEPstatus', fetchCEP(this.value))" id="CEP">
+          <p id="CEPstatus"></p>
           
           
           <label>Logradouro:</label>
-          <input type="text" onchange="isEmpty(this.value, 'sobrenome')">
-          <p id="statusSobrenome"></p>
+          <input type="text" onchange="statusText('statusLogradouro', isEmpty(this.value, 'logradouro'))" id="logradouro">
+          <p id="statusLogradouro"></p>
           
           
           <label>Bairro:</label>
-          <input type="text" onblur="validarCPF(this.value)">
-          <p id="statusCPF"></p>
+          <input type="text" onchange="statusText('statusBairro', isEmpty(this.value, 'statusBairro'))" id="bairro">
+          <p id="statusBairro"></p>
           
           
           <label>Cidade</label>
-          <input type="text" onchange="isEmail(this.value, 'email')">
-          <p id="statusEmail"></p>
+          <input type="text" onchange="statusText('statusCidade', isEmpty(this.value, 'statusCidade'))" id="cidade">
+          <p id="statusCidade"></p>
           
           
-          <label>Estado</label>
-          <input type="password">
-          <p id="statusSenha"></p>
+          <label>UF</label>
+          <input type="text" id="uf" onchange="statusText('statusUF', isEmpty(this.value, 'uf'));fetchCity(this.value)">
+          <p id="statusUF"></p>
           
+          <label>Cidade (API)</label>
+          <select id="citySelector">
+          </select>
+
           <div id="areaBotaoConta" style="margin-bottom: 12%;">
             <input type="button" value="Criar conta" style="min-width: 100px" onclick="printState()">
           </div>
+
 
           
           
